@@ -1,0 +1,59 @@
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+version = '1.0.0'
+
+repositories {
+    maven {
+        url "http://gear.glad.so:81/nexus/content/groups/public/"
+    }
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+dependencies {
+    compile("org.apache.tomcat.embed:tomcat-embed-core:8.0.20")
+    compile("org.slf4j:slf4j-api:1.7.10")
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'so.glad'
+            artifactId = 'soglad-test'
+
+            from components.java
+            artifacts {
+                archives javadocJar
+                archives sourcesJar
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            artifactUrls ["http://gear.glad.so:81/nexus/content/groups/public/"]
+            if(project.version.endsWith('-SNAPSHOT')) {
+                url "http://gear.glad.so:81/nexus/content/repositories/snapshots/"
+            } else {
+                url "http://gear.glad.so:81/nexus/content/repositories/releases/"
+            }
+            credentials {
+                username "${PUBLISH_USERNAME}"
+                password "${PUBLISH_PASSWORD}"
+            }
+        }
+    }
+}
