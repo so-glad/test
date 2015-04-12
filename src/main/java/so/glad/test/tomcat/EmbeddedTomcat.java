@@ -10,7 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by Cartoon on 2015/3/12.
+ * @author Cartoon
+ * on 2015/3/12.
  */
 public class EmbeddedTomcat {
     private static final Logger logger = LoggerFactory.getLogger(EmbeddedTomcat.class);
@@ -35,7 +36,7 @@ public class EmbeddedTomcat {
             httpsConnector.setAttribute("keyAlias", "tomcat-embed");
 
             httpsConnector.setAttribute("keystorePass", "tomcat-embed");
-            String keystoreFile = null;
+            String keystoreFile;
             if (System.getProperty("keystore") != null) {
                 keystoreFile = System.getProperty("keystore") + "/tomcat-embed.key";
             } else if (System.getenv("NUKE_HOME") != null) {

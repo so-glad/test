@@ -20,9 +20,9 @@ import org.slf4j.LoggerFactory;
 
 import so.glad.test.Environment;
 
-
 /**
- * Created by Cartoon on 2015/3/12.
+ * @author Cartoon
+ * on 2015/3/12.
  */
 public class TomcatEnvironment implements Environment{
     private static final Logger logger = LoggerFactory.getLogger(TomcatEnvironment.class);
@@ -31,7 +31,7 @@ public class TomcatEnvironment implements Environment{
     private String context = "test";
 
     private Tomcat tomcat;
-    private List<ServletWrapper> servletWrappers = new ArrayList<ServletWrapper>();
+    private List<ServletWrapper> servletWrappers = new ArrayList<>();
 
     private boolean await = false;
     private boolean https = false;
@@ -65,7 +65,7 @@ public class TomcatEnvironment implements Environment{
             httpsConnector.setAttribute("keyAlias", "tomcat-embed");
 
             httpsConnector.setAttribute("keystorePass", "tomcat-embed");
-            String keystoreFile = null;
+            String keystoreFile;
             if (System.getProperty("keystore") != null) {
                 keystoreFile = System.getProperty("keystore") + "/tomcat-embed.key";
             } else if (System.getenv("NUKE_HOME") != null) {
@@ -87,7 +87,7 @@ public class TomcatEnvironment implements Environment{
 
         Context context = tomcat.addContext("/" + this.context, new File("").getAbsolutePath());
 
-        Set<String> servletNames = new HashSet<String>();
+        Set<String> servletNames = new HashSet<>();
         for (ServletWrapper servletWrapper : servletWrappers) {
             String servletName = generateServletName(servletWrapper.servlet);
             while (servletNames.contains(servletName)) {
